@@ -1,6 +1,7 @@
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { nanoid } from 'nanoid';
+import { toast } from 'react-hot-toast';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Form,
@@ -16,7 +17,6 @@ import { addContact } from 'redux/operations';
 import { BsTelephoneFill } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
 import { IoMdPersonAdd } from 'react-icons/io';
-import numberFormat from '../../utils/numberFormat';
 import { selectContacts } from '../../redux/selectors';
 
 const schema = yup.object().shape({
@@ -40,14 +40,14 @@ const ContactForm = () => {
     );
 
     if (findContacts) {
-      alert(`${findContacts.name} is already in contacts.`);
+      toast.error(`${findContacts.name} is already in contacts.`);
       return;
     }
 
     const newContact = {
       id: nanoid(),
       name: values.name,
-      number: numberFormat(values.number),
+      phone: values.number,
     };
 
     dispatch(addContact(newContact));

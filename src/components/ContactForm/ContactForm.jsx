@@ -12,7 +12,7 @@ import {
   ErrorMessage,
   FormBtn,
 } from './ContactForm.styled';
-import { addContact } from 'redux/contactsSlice';
+import { addContact } from 'redux/operations';
 import { BsTelephoneFill } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
 import { IoMdPersonAdd } from 'react-icons/io';

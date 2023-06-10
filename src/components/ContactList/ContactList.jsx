@@ -1,17 +1,11 @@
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+import { selectVisibleContacts } from 'redux/selectors';
 import ContactCard from '../ContactCard';
 import { List } from './ContactList.Styled';
-import { selectContacts, selectFilter } from 'redux/selectors';
 
 const ContactList = () => {
-  const contacts = useSelector(selectContacts);
-  const fromFilter = useSelector(selectFilter);
-
-  const normalize = fromFilter.toLowerCase();
-  const visibleContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(normalize)
-  );
+  const visibleContacts = useSelector(selectVisibleContacts);
 
   return (
     <List>

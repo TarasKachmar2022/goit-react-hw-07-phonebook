@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { ThreeDots } from 'react-loader-spinner';
+import { selectIsLoading } from 'redux/selectors';
 import { IoPersonRemove } from 'react-icons/io5';
 import { deleteContact } from '../../redux/operations';
 import {
@@ -20,7 +22,9 @@ const ContactCard = ({ id, name, number }) => {
         <ContactNumber>{number}</ContactNumber>
       </ContactContainer>
       <DeleteBtn type="button" onClick={() => dispatch(deleteContact(id))}>
-        <IoPersonRemove />
+        {(selectIsLoading && (
+          <ThreeDots height="16" width="16" color="white" />
+        )) || <IoPersonRemove />}
       </DeleteBtn>
     </ContactItem>
   );

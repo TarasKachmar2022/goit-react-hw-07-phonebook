@@ -9,7 +9,6 @@ export const fetchContacts = createAsyncThunk(
       const contacts = await APIs.getContacts();
       return contacts;
     } catch (error) {
-      toast.error(error.message);
       return rejectWithValue(error.message);
     }
   }
@@ -23,7 +22,6 @@ export const addContact = createAsyncThunk(
       toast.success('Contact added successfully!');
       return contacts;
     } catch (error) {
-      toast.error(error.message);
       return rejectWithValue(error.message);
     }
   }
@@ -37,7 +35,6 @@ export const deleteContact = createAsyncThunk(
       toast.success('Contact deleted successfully!');
       return contacts;
     } catch (error) {
-      toast.error(error.message);
       return rejectWithValue(error.message);
     }
   }

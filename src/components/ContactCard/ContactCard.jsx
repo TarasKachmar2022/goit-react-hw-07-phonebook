@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-hot-toast';
 import { ThreeDots } from 'react-loader-spinner';
-import { selectIsLoading } from 'redux/selectors';
 import { IoPersonRemove } from 'react-icons/io5';
 import { deleteContact } from '../../redux/operations';
 import {
@@ -11,9 +11,22 @@ import {
   ContactNumber,
   DeleteBtn,
 } from './ContactCard.styled';
+import { useState } from 'react';
 
 const ContactCard = ({ id, name, number }) => {
   const dispatch = useDispatch();
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = async id => {
+    try {
+      setIsDeleting(true);
+      await dispatch(deleteContact(id));
+      setIsDeleting(false);
+    } catch (error) {
+      toast.error(error.message);
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <ContactItem>
@@ -21,10 +34,10 @@ const ContactCard = ({ id, name, number }) => {
         <ContactTitle>{name}:</ContactTitle>
         <ContactNumber>{number}</ContactNumber>
       </ContactContainer>
-      <DeleteBtn type="button" onClick={() => dispatch(deleteContact(id))}>
-        {(selectIsLoading && (
-          <ThreeDots height="16" width="16" color="white" />
-        )) || <IoPersonRemove />}
+      <DeleteBtn type="button" onClick={() => handleDelete(id)}>
+        {(isDeleting && <ThreeDots height="20" width="16" color="white" />) || (
+          <IoPersonRemove />
+        )}
       </DeleteBtn>
     </ContactItem>
   );

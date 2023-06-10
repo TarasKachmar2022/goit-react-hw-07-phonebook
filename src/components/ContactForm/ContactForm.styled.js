@@ -114,3 +114,7 @@ export const FormBtn = styled.button`
 export const FormBtnText = styled.span`
   margin-left: 10px;
 `;
+
+export const FormBtnWrapper = styled.span`
+  display: flex;
+`;

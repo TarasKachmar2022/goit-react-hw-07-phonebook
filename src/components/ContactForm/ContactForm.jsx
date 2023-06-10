@@ -2,6 +2,7 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import { nanoid } from 'nanoid';
 import { toast } from 'react-hot-toast';
+import { ThreeDots } from 'react-loader-spinner';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Form,
@@ -12,12 +13,13 @@ import {
   InputField,
   ErrorMessage,
   FormBtn,
+  FormBtnWrapper,
 } from './ContactForm.styled';
 import { addContact } from 'redux/operations';
 import { BsTelephoneFill } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
 import { IoMdPersonAdd } from 'react-icons/io';
-import { selectContacts } from '../../redux/selectors';
+import { selectContacts, selectIsLoading } from '../../redux/selectors';
 
 const schema = yup.object().shape({
   name: yup.string().required(),
@@ -32,6 +34,7 @@ const ContactForm = () => {
 
   const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
+  const isLoading = useSelector(selectIsLoading);
 
   const handleSubmit = (values, { resetForm }) => {
     const findContacts = contacts.find(
@@ -93,8 +96,17 @@ const ContactForm = () => {
           <ErrorMessage name="number" component="div" />
         </FormLabel>
         <FormBtn type="submit">
-          <IoMdPersonAdd />
-          <FormBtnText>Add contact</FormBtnText>
+          {(isLoading && (
+            <FormBtnWrapper>
+              <ThreeDots height="20" width="20" color="white" />
+              <FormBtnText>Add contact</FormBtnText>
+            </FormBtnWrapper>
+          )) || (
+            <>
+              <IoMdPersonAdd />
+              <FormBtnText>Add contact</FormBtnText>
+            </>
+          )}
         </FormBtn>
       </Form>
     </Formik>

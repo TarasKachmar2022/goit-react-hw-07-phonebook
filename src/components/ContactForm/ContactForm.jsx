@@ -3,6 +3,7 @@ import * as yup from 'yup';
 import { nanoid } from 'nanoid';
 import { toast } from 'react-hot-toast';
 import { ThreeDots } from 'react-loader-spinner';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Form,
@@ -19,7 +20,7 @@ import { addContact } from 'redux/operations';
 import { BsTelephoneFill } from 'react-icons/bs';
 import { FaUser } from 'react-icons/fa';
 import { IoMdPersonAdd } from 'react-icons/io';
-import { selectContacts, selectIsLoading } from '../../redux/selectors';
+import { selectContacts } from '../../redux/selectors';
 
 const schema = yup.object().shape({
   name: yup.string().required(),
@@ -32,9 +33,9 @@ const ContactForm = () => {
     number: '',
   };
 
+  const [isAdding, setIsAdding] = useState(false);
   const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
-  const isLoading = useSelector(selectIsLoading);
 
   const handleSubmit = (values, { resetForm }) => {
     const findContacts = contacts.find(
@@ -53,9 +54,19 @@ const ContactForm = () => {
       phone: values.number,
     };
 
-    dispatch(addContact(newContact));
-
+    handleAdd(newContact);
     resetForm();
+  };
+
+  const handleAdd = async newContact => {
+    try {
+      setIsAdding(true);
+      await dispatch(addContact(newContact));
+      setIsAdding(false);
+    } catch (error) {
+      toast.error(error.message);
+      setIsAdding(false);
+    }
   };
 
   return (
@@ -96,7 +107,7 @@ const ContactForm = () => {
           <ErrorMessage name="number" component="div" />
         </FormLabel>
         <FormBtn type="submit">
-          {(isLoading && (
+          {(isAdding && (
             <FormBtnWrapper>
               <ThreeDots height="20" width="20" color="white" />
               <FormBtnText>Add contact</FormBtnText>
